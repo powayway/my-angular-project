@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
       () => {
         console.log('Sign In Successful!');
         this.authStatus = this.authService.isAuth;
-        this.router.navigate(["appareils"]);
+        this.router.navigate(['/appareils']);
       }
     );
   }
