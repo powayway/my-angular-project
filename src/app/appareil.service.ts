@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,35 @@ export class AppareilService {
     }
   ];
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
+
+  saveAppareilsToServer() {
+    this.httpClient
+      .put('https://my-angular-app-f0ab3.firebaseio.com/appareils.json', this.appareils)
+      .subscribe(
+        () => {
+          console.log('Enregistrement terminé !');
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+  }
+
+  getAppareilsFromServer() {
+    this.httpClient
+      .get<any[]>('https://my-angular-app-f0ab3.firebaseio.com/appareils.json')
+      .subscribe(
+        (response) => {
+          console.log('Récupération effectuée !')
+          this.appareils = response;
+          this.emitAppareilSubject();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+  }
 
   addAppareil(name: string, status: string) {
     const appareilObject = {
